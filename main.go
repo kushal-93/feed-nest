@@ -17,6 +17,11 @@ func main() {
 		log.Fatal("PORT is not found. Exiting.")
 	}
 
+	dbUrl := os.Getenv("DB_URL")
+	if dbUrl == "" {
+		log.Fatal("DB_URL is not found. Exiting.")
+	}
+
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"https://*", "http://*"},
