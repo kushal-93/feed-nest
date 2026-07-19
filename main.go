@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,18 +11,13 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello World!")
-
 	godotenv.Load()
-
 	port := os.Getenv("PORT")
-
 	if port == "" {
 		log.Fatal("PORT is not found. Exiting.")
 	}
 
 	router := chi.NewRouter()
-
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"https://*", "http://*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
