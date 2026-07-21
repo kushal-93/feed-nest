@@ -16,6 +16,7 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 	}
 
 	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
 	params := parameters{}
 	err := decoder.Decode(&params)
 	if err != nil {
@@ -35,5 +36,5 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	respondWithJSON(w, 200, user)
+	respondWithJSON(w, 200, databaseUserToUser(user))
 }
