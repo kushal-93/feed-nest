@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -28,8 +29,8 @@ func main() {
 	}
 
 	fmt.Println(feed.Channel.Title)
-	fmt.Println(feed.Channel.Link)
-	fmt.Println(feed.Channel.Item)
+	//fmt.Println(feed.Channel.Link)
+	//fmt.Println(feed.Channel.Item)
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
@@ -51,6 +52,9 @@ func main() {
 	apiCfg := apiConfig{
 		DB: database.New(conn),
 	}
+
+	go startScraping(apiCfg.DB, 10, time.Minute)
+
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
