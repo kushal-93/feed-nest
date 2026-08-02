@@ -33,6 +33,44 @@ type modelFeedFollow struct {
 	UserID    uuid.UUID `json:"userId"`
 }
 
+type modelPost struct {
+	Id          uuid.UUID `json:"id"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+	Title       string    `json:"title"`
+	Description *string   `json:"description"`
+	PublishedAt time.Time `json:"publishedAt"`
+	Url         string    `json:"url"`
+	FeedId      uuid.UUID `json:"feedId"`
+}
+
+func databasePostToPost(post database.Post) modelPost {
+	var description *string
+	if post.Description.Valid {
+		description = &(post.Description.String)
+	}
+
+	return modelPost{
+		Id:          post.ID,
+		CreatedAt:   post.CreatedAt,
+		UpdatedAt:   post.UpdatedAt,
+		Title:       post.Title,
+		Description: description,
+		Url:         post.Url,
+		FeedId:      post.FeedID,
+	}
+}
+
+func databasePostsToPosts(posts []database.Post) []modelPost {
+	modelPosts := []modelPost{}
+
+	for _, v := range posts {
+		modelPosts = append(modelPosts, databasePostToPost(v))
+	}
+
+	return modelPosts
+}
+
 func databaseUserToUser(user database.User) modelUser {
 	return modelUser{
 		Id:        user.ID,

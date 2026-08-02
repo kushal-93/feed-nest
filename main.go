@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -22,13 +21,13 @@ type apiConfig struct {
 
 func main() {
 
-	feed, err := urlToFeed("https://www.wagslane.dev/index.xml")
+	//feed, err := urlToFeed("https://www.wagslane.dev/index.xml")
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
-	fmt.Println(feed.Channel.Title)
+	//fmt.Println(feed.Channel.Title)
 	//fmt.Println(feed.Channel.Link)
 	//fmt.Println(feed.Channel.Item)
 
@@ -55,7 +54,6 @@ func main() {
 
 	go startScraping(apiCfg.DB, 10, time.Minute)
 
-
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"https://*", "http://*"},
@@ -75,6 +73,7 @@ func main() {
 	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handleCreateFeedFollow))
 	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handleGetFeedFollows))
 	v1Router.Delete("/feed_follows/{feedFollowId}", apiCfg.middlewareAuth(apiCfg.handleDeleteFeedFollow))
+	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handleGetPostsForUser))
 
 	router.Mount("/v1", v1Router)
 
