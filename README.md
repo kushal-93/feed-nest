@@ -1,6 +1,6 @@
 # FeedNest
 
-A simple, lightweight RSS feed aggregator and user subscription backend service built in Go. This is a toy project designed for learning Go backend development, database integration, concurrency, and API design.
+A simple, lightweight RSS feed aggregator and user subscription backend service built in Go. This is a toy project designed for learning Go backend development, database integration, concurrency, API design, and clean handler decoration patterns for authentication.
 
 ## Features
 
@@ -68,7 +68,17 @@ All routes are prefixed with `/v1`.
 | **GET** | `/posts` | Yes | Get posts from the user's subscribed feeds |
 
 ### Authentication
+
 For endpoints requiring authentication, provide the user's API Key in the request header:
 ```http
 Authorization: ApiKey <your_api_key>
 ```
+
+#### Custom Authenticated Handler Pattern
+The project uses a custom wrapper/decorator pattern (`middlewareAuth`) to handle authenticated routes:
+
+```go
+type authedHandler func(http.ResponseWriter, *http.Request, database.User)
+```
+
+This pattern extracts the API key, fetches the user, and injects the user details directly into downstream handlers. This avoids repetitive user authentication and database lookup code.
